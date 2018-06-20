@@ -34,3 +34,66 @@ The actually create the instance, run the `terraform apply` command.
 Now that you have some working Terraform code, you may want to store it in version control.
 This allows you to share your code with other team members, track the history of all infrastructure changes, and use the commit log for debugging.
 
+## Deploying a Single Web Server
+
+By default, AWS does not allow any incoming or outgoing traffic from an EC2 instance.
+To allow the EC2 instance to receive traffic on port 8080, you need to create a *security group*:
+```terraform
+resource "aws_security_group" "instance" {
+  name = "terraform-example-instance"
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+```
+Simply creating a security group isn't enough;
+you also need to tell the EC2 instance to actually use it.
+To do that, you need to pass the ID of the security group into the `vpc_security_group_ids` parameter of the `aws_instance` resource.
+
+To get the ID of the security group, you can use *interpolation syntax*, which looks like this:
+```terraform
+"${something_to_interpolate}"
+```
+Whenever you see a dollar sign and curly braces inside of double quotes, that means Terraform is going to process the text within the curly braces in a special way.
+
+In Terraform, every resource exposes attributes that you can access using interpolation (you can find the list of available attributes in the documentation for each resource).
+The syntax is:
+```terraform
+"${TYPE.NAME.ATTRIBUTE}"
+```
+When you use interpolation syntax to have one resource reference another resource, you create an implicit dependency.
+Terraform parses these dependencies, builds a dependency graph from them, and uses that to automatically figure out in what order it should create resources.
+
+## Deploy a Configurable Web Server
+
+To allow you to make your code more DRY and more configurable, Terraform allows you to define *input variables*.
+The syntax for declaring a variable is:
+```terraform
+variable "NAME" {
+  [CONFIG ...]
+}
+```
+The body of the variable declaration can contain three parameters, all of them optional:
+* description
+* default
+* type
+
+To extract values from these input variables in your Terraform code, you can use interpolation syntax again.
+The syntax for looking up a variable is:
+```terraform
+"${var.VARIABLE_NAME}"
+}
+```
+In addition to input variables, Terraform also allows you to define *output variables* with the following syntax:
+```terraform
+output "NAME" {
+  value = VALUE
+}
+```
+
+## Deploy a Cluster of Web Servers
+
