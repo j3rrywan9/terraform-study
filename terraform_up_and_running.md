@@ -97,3 +97,30 @@ output "NAME" {
 
 ## Deploy a Cluster of Web Servers
 
+Fortunately, you can let AWS take care of it for you by using an *Auto Scaling Group (ASG)*.
+An ASG takes care of a lot of tasks for you completely automatically, including launching a cluster of EC2 instances, monitoring the health of each instance, replacing failed instances, and adjusting the size of the cluster in response to load.
+
+The first step in creating an ASG is to create a *launch configuration*, which specifies how to configure each EC2 instance in the ASG.
+
+The `lifecycle` parameter is an example of a *meta-parameter*, or a parameter that exists on just about every resource in Terraform.
+You can add a `lifecycle` block to any resource to configure how that resource should be created, updated,or destroyed.
+
+One of the available `lifecycle` settings is `create_before_destroy`, which, if set to `true`, tells Terraform to always create a replacement resource before destroying the original resource.
+
+## Deploy a Load Balancer
+
+One way to solve this problem is to deploy a *load balancer* to distribute traffic across your servers and to give all your users the IP (actually, the DNS name) of the load balancer.
+
+## Cleanup
+
+Since Terraform keeps track of what resources you created, cleanup is simple.
+All you need to do is run the destroy command:
+```terraform
+terraform destroy
+```
+
+The whole point of having separate environments is that they are isolated from each other, so if you are managing all the environments from a single set of Terraform configurations, you are breaking that isolation.
+
+The way to do that is to put the Terraform configuration files for each environment into a separate folder.
+That way, Terraform will use a separate state file for each environment, which makes it significantly less likely that a screw up in one environment can have any impact on anther.
+
