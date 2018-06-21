@@ -91,7 +91,44 @@ Providers are responsible in Terraform for managing the lifecycle of a resource:
 Most providers require some sort of configuration to provide authentication information, endpoint URLs, etc.
 Provider configuration blocks are a way to set this information globally for all matching resources.
 
+### Variables
+
+### Outputs
+
+### Local Values
+
+Local values assign a name to an expression, that can then be used multiple times within a module.
+
+Comparing modules to functions in a traditional programming language, if variables are analogous to function arguments and outputs are analogous to function return values then *local values* are comparable to a function's local variables.
+
+#### Examples
+
+Local values are defined in locals blocks:
+```terraform
+# Ids for multiple sets of EC2 instances, merged together
+locals {
+  instance_ids = "${concat(aws_instance.blue.*.id, aws_instance.green.*.id)}"
+}
+
+# A computed default name prefix
+locals {
+  default_name_prefix = "${var.project_name}-web"
+  name_prefix         = "${var.name_prefix != "" ? var.name_prefix : local.default_name_prefix}"
+}
+
+# Local values can be interpolated elsewhere using the "local." prefix.
+resource "aws_s3_bucket" "files" {
+  bucket = "${local.name_prefix}-files"
+  # ...
+}
+```
+
 ## Providers
+
+### AWS Provider
+
+The Amazon Web Services (AWS) provider is used to interact with the many resources supported by AWS.
+The provider needs to be configured with the proper credentials before it can be used.
 
 ### Google Cloud provider
 
