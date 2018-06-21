@@ -124,3 +124,76 @@ The whole point of having separate environments is that they are isolated from e
 The way to do that is to put the Terraform configuration files for each environment into a separate folder.
 That way, Terraform will use a separate state file for each environment, which makes it significantly less likely that a screw up in one environment can have any impact on anther.
 
+Within each environment, there are separate folders for each "component".
+
+Within each component, there are the actual Terraform configuration files, which are organized according to the following naming conventions:
+* variables.tf: Input variables.
+* outputs.tf: Output variables.
+* main.tf: The actual resources.
+
+For each input variable `foo` defined in your Terraform configurations, you can provideTerraform the value of this variable using the environment variable `TF_VAR_foo`.
+
+An *interpolation function* is a function you can use within Terraform's interpolation syntax:
+```terraform
+"${some_function(...)}"
+```
+
+A great way to experiment with interpolation functions is to run the `terraform console` command to get an interactive console where you can try out different Terraform syntax, query the state of your infrastructure, and see the results instantly:
+```bash
+terraform console
+```
+
+There a number of other built-in functions that can be used to manipulate strings, numbers, lists, and maps.
+One of them is the `file` interpolation function:
+```terraform
+"${file(PATH)}"
+```
+This function reads the file at `PATH` and returns its contents as a string.
+
+The `template_file` data source has two parameters: the `template` parameter, which is a string, and the `vars` parameter, which is a map of variables.
+
+The final step is to update the `user_data` parameter of the `aws_launch_configuration` resource to point to the `rendered` output attribute of the `template_file` data source.
+
+## How to Create Reusable Infrastructure with Terraform Modules
+
+With Terraform, you can put your code inside of a *Terraform module* and reuse that module in multiple places throughout your code.
+
+### Module Basics
+
+A Terraform module is very simple: any set of Terraform configuration files in a folder is a module.
+
+### Module Inputs
+
+In Terraform, modules can have input parameters, too.
+To define them, you use a mechanism you're already familiar with: input variables.
+
+The input variables are the API of the module, controlling how it will behave in different environments.
+
+### Module Outputs
+
+In Terraform, a module can also return values.
+Again, this is done using a mechanism you already know: output variables.
+
+You can access module output variables the same way as resource output attributes.
+The syntax is:
+```terraform
+"${module.MODULE_NAME.OUTPUT_NAME}"
+```
+
+### Module Gotchas
+
+#### File Paths
+
+The catch with `file` function is that the file path you use has to be relative.
+
+By default, Terraform interprets the path relative to the current working directory.
+
+To solve this issue, you can use `path.module` to convert to a path that is relative to the module folder.
+
+#### Inline Blocks
+
+The configuration for some Terraform resources can be defined either as inline blocks or as separate resources.
+When creating a module, you should always prefer using a separate resource.
+
+#### Module Versioning
+
