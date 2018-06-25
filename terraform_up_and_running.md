@@ -107,6 +107,15 @@ You can add a `lifecycle` block to any resource to configure how that resource s
 
 One of the available `lifecycle` settings is `create_before_destroy`, which, if set to `true`, tells Terraform to always create a replacement resource before destroying the original resource.
 
+A *data source* represents a piece of read-only information that is fetched from the provider (in this case, AWS) every time your run Terraform.
+Adding a data source to your Terraform configurations does not create anything new; it’s just a way to query the provider’s APIs for data.
+There are data sources to not only get the list of availability zones, but also AMI IDs, IP address ranges, and the current user’s identity.
+
+To use the data source, you reference it using the following syntax:
+```terraform
+"${data.TYPE.NAME.ATTRIBUTE}"
+```
+
 ## Deploy a Load Balancer
 
 One way to solve this problem is to deploy a *load balancer* to distribute traffic across your servers and to give all your users the IP (actually, the DNS name) of the load balancer.
