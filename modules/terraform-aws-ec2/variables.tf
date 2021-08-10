@@ -10,6 +10,10 @@ variable "vpc_security_group_ids" {
   description = "Security group IDs"
 }
 
+variable "init_file" {
+  description = "The rendered EC2 init file"
+}
+
 variable "server_port" {
   description = "The port the server will use for HTTP requests"
 }
