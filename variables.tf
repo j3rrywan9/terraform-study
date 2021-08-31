@@ -46,7 +46,7 @@ variable "image_id" {
   default = "ami-03db9b2aac6af477d"
 }
 
-variable "instance_type" {
+variable "sonarqube_server_instance_type" {
   type    = string
   default = "t2.xlarge"
 }
@@ -61,8 +61,8 @@ variable "default_user" {
   default = "ec2-user"
 }
 
-variable "server_port" {
-  description = "The port the server will use for HTTP requests"
+variable "sonarqube_server_port" {
+  description = "The port the SonarQube server will use for HTTP requests"
   type        = number
   default     = 80
 }
@@ -71,4 +71,10 @@ variable "vpn_cidr_blocks" {
   description = "VPN CIDR blocks"
   type        = list(string)
   default     = ["98.42.201.180/32"]
+}
+
+variable "sonarqube_image_tag" {
+  description = "SonarQube docker image tag"
+  type        = string
+  default     = "8.9.2-enterprise"
 }
