@@ -2,7 +2,7 @@ resource "aws_launch_template" "sonarqube_server_lt" {
   name_prefix   = "sonarqube-server-"
   image_id      = var.image_id
   instance_type = var.sonarqube_server_instance_type
-  key_name      = "example"
+  key_name      = "sonarqube-ssh-key"
 
   vpc_security_group_ids = [
     "sg-ef68cbf0",
