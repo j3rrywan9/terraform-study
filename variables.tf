@@ -14,6 +14,12 @@ variable "aws_secret_key" {
   description = "AWS secret key"
 }
 
+variable "account_id" {
+  description = "The account ID of the member account"
+  type        = string
+  default     = "950350094460"
+}
+
 variable "vpc_id" {
   default = "vpc-b73740ca"
 }
@@ -48,7 +54,7 @@ variable "image_id" {
 
 variable "sonarqube_server_instance_type" {
   type    = string
-  default = "t2.xlarge"
+  default = "t2.micro"
 }
 
 variable "docker_compose_version" {
@@ -77,4 +83,10 @@ variable "sonarqube_image_tag" {
   description = "SonarQube docker image tag"
   type        = string
   default     = "8.9.2-enterprise"
+}
+
+variable "alert_email_address" {
+  description = "The email address who will receive alerts"
+  type        = string
+  default     = "jerry@cafefullstack.com"
 }

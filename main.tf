@@ -11,6 +11,13 @@ module "asg" {
   init_file                      = data.template_file.init.rendered
 }
 
+module "sns" {
+  source                    = "./modules/terraform-aws-sns"
+  account_id                = var.account_id
+  recipient                 = var.alert_email_address
+  sonarqube_server_asg_name = module.asg.sonarqube_server_asg_name
+}
+
 resource "aws_ecs_capacity_provider" "sonarqube_capacity_provider" {
   name = "sonarqube-capacity-provider"
 
