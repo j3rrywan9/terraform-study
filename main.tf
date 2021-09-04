@@ -62,7 +62,7 @@ resource "aws_ecs_capacity_provider" "sonarqube_server_capacity_provider" {
 }
 
 resource "aws_ecs_cluster" "sonarqube_server_cluster" {
-  name = "sonarqube-server-cluster"
+  name = var.ecs_cluster_name
 
   capacity_providers = [
     aws_ecs_capacity_provider.sonarqube_server_capacity_provider.name,

@@ -45,6 +45,12 @@ variable "master_db_password" {
   description = "Password for the master DB user"
 }
 
+variable "ecs_cluster_name" {
+  description = "ECS cluster name"
+  type        = string
+  default     = "sonarqube-server-cluster"
+}
+
 variable "image_id" {
   description = "AMI image ID"
   type        = string
