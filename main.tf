@@ -35,6 +35,7 @@ module "asg" {
     module.security_groups.asg_security_group_id,
     module.security_groups.ssh_non_prod_vpn_security_group_id,
   ]
+  subnet_ids = data.aws_subnet_ids.subnet_ids.ids
   # TODO: remove ASG level ALB integration
   target_group_arns = [
     module.alb.alb_target_group_arn,

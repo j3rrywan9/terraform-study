@@ -45,7 +45,7 @@ resource "aws_autoscaling_group" "sonarqube_server_asg" {
   #protect_from_scale_in = true
   # TODO: figure out health check
   #health_check_type = "EC2"
-  vpc_zone_identifier = ["subnet-1fc9d411", "subnet-fc10fbb0"]
+  vpc_zone_identifier = var.subnet_ids
   # TODO: remove ASG level ALB integration
   target_group_arns = var.target_group_arns
 
