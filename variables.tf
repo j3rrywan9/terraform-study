@@ -85,6 +85,12 @@ variable "sonarqube_image_tag" {
   default     = "8.9.2-enterprise"
 }
 
+variable "alb_allowed_cidr_blocks" {
+  description = "CIDR blocks that are allowed access to ALB"
+  type        = list(string)
+  default     = ["98.42.201.180/32"]
+}
+
 variable "alert_email_address" {
   description = "The email address who will receive alerts"
   type        = string

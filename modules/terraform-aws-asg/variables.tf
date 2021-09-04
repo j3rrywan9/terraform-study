@@ -9,3 +9,11 @@ variable "sonarqube_server_instance_type" {
 variable "init_file" {
   description = "The rendered EC2 init file"
 }
+
+variable "vpc_security_group_ids" {
+  description = "Security group IDs"
+}
+
+variable "target_group_arns" {
+  description = "The ARNs of the ALB target groups"
+}
