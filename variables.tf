@@ -73,6 +73,12 @@ variable "default_user" {
   default = "ec2-user"
 }
 
+variable "container_name" {
+  description = "Docker container name"
+  type        = string
+  default     = "nginx"
+}
+
 variable "sonarqube_server_port" {
   description = "The port the SonarQube server will use for HTTP requests"
   type        = number

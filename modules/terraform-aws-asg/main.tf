@@ -46,8 +46,6 @@ resource "aws_autoscaling_group" "sonarqube_server_asg" {
   # TODO: figure out health check
   #health_check_type = "EC2"
   vpc_zone_identifier = var.subnet_ids
-  # TODO: remove ASG level ALB integration
-  target_group_arns = var.target_group_arns
 
   launch_template {
     id      = aws_launch_template.sonarqube_server_lt.id

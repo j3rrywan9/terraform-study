@@ -36,10 +36,6 @@ module "asg" {
     module.security_groups.ssh_non_prod_vpn_security_group_id,
   ]
   subnet_ids = data.aws_subnet_ids.subnet_ids.ids
-  # TODO: remove ASG level ALB integration
-  target_group_arns = [
-    module.alb.alb_target_group_arn,
-  ]
 }
 
 module "sns" {
@@ -85,31 +81,30 @@ resource "aws_ecs_task_definition" "sonarqube_server_taskdef" {
   family        = "sonarqube-server-task"
   task_role_arn = "arn:aws:iam::950350094460:role/ecsTaskExecutionRole"
   # TODO: switch to awsvpc
-  network_mode          = "bridge"
-  container_definitions = <<TASK_DEFINITION
-[
+  network_mode = "bridge"
+  container_definitions = jsonencode([
     {
-        "cpu": 256,
-        "essential": true,
-        "image": "nginx",
-        "memory": 512,
-        "name": "nginx",
-        "portMappings": [
-            {
-                "containerPort": 80,
-                "hostPort": 80
-            }
-        ],
-        "requiresCompatibilities":[
-            "EC2"
-        ]
+      name      = var.container_name
+      image     = "nginx:latest"
+      cpu       = 256
+      memory    = 512
+      essential = true
+      portMappings = [
+        {
+          containerPort = 80
+          hostPort      = 80
+          protocol      = "tcp"
+        }
+      ]
+      requiresCompatibilities = [
+        "EC2"
+      ]
     }
-]
-TASK_DEFINITION
+  ])
 }
 
 resource "aws_ecs_service" "sonarqube-server-service" {
-  name = "sonarqube-service"
+  name = "sonarqube-server-service"
 
   cluster             = aws_ecs_cluster.sonarqube_server_cluster.id
   task_definition     = aws_ecs_task_definition.sonarqube_server_taskdef.arn
@@ -120,5 +115,11 @@ resource "aws_ecs_service" "sonarqube-server-service" {
     capacity_provider = aws_ecs_capacity_provider.sonarqube_server_capacity_provider.name
     base              = 0
     weight            = 1
+  }
+
+  load_balancer {
+    target_group_arn = module.alb.alb_target_group_arn
+    container_name   = var.container_name
+    container_port   = 80
   }
 }

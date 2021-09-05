@@ -17,7 +17,3 @@ variable "vpc_security_group_ids" {
 variable "subnet_ids" {
   description = "Subnet IDs"
 }
-
-variable "target_group_arns" {
-  description = "The ARNs of the ALB target groups"
-}
