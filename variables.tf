@@ -60,7 +60,7 @@ variable "image_id" {
 
 variable "sonarqube_server_instance_type" {
   type    = string
-  default = "t2.micro"
+  default = "t2.2xlarge"
 }
 
 variable "docker_compose_version" {
@@ -76,7 +76,7 @@ variable "default_user" {
 variable "container_name" {
   description = "Docker container name"
   type        = string
-  default     = "nginx"
+  default     = "sonarqube"
 }
 
 variable "sonarqube_server_port" {

@@ -15,7 +15,7 @@ resource "aws_lb" "alb" {
 
 resource "aws_alb_target_group" "alb_target_group" {
   name = "sonarqube-server-alb-tg"
-  port = 80
+  port = 9000
   protocol = "HTTP"
   # TODO: switch to "ip" when using the "awsvpc" network mode
   target_type = "instance"
@@ -23,7 +23,7 @@ resource "aws_alb_target_group" "alb_target_group" {
 
   health_check {
     matcher = "200"
-    path = "/"
+    path = "/api/system/status"
   }
 
   tags = {

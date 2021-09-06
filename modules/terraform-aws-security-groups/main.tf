@@ -78,11 +78,21 @@ resource "aws_security_group" "asg" {
   }
 }
 
-resource "aws_security_group_rule" "alb_access" {
+/*resource "aws_security_group_rule" "alb_access" {
   description = "ASG access from ALB"
   type = "ingress"
   from_port   = 80
   to_port     = 80
+  protocol    = "tcp"
+  source_security_group_id = aws_security_group.alb.id
+  security_group_id = aws_security_group.asg.id
+}*/
+
+resource "aws_security_group_rule" "alb_access_via_port_9000" {
+  description = "ASG access from ALB"
+  type = "ingress"
+  from_port   = 9000
+  to_port     = 9000
   protocol    = "tcp"
   source_security_group_id = aws_security_group.alb.id
   security_group_id = aws_security_group.asg.id

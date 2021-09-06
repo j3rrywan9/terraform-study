@@ -80,18 +80,25 @@ resource "aws_ecs_cluster" "sonarqube_server_cluster" {
 resource "aws_ecs_task_definition" "sonarqube_server_taskdef" {
   family        = "sonarqube-server-task"
   task_role_arn = "arn:aws:iam::950350094460:role/ecsTaskExecutionRole"
-  cpu           = 256
-  memory        = 512
+  cpu           = 4096
+  memory        = 16384
   # TODO: switch to awsvpc
   network_mode = "host"
   container_definitions = jsonencode([
     {
       name      = var.container_name
-      image     = "nginx:latest"
+      image     = "sonarqube:8.9.2-enterprise"
       essential = true
+      ulimits = [
+        {
+          name = "nofile"
+          softLimit = 65536
+          hardLimit = 65536
+        }
+      ]
       portMappings = [
         {
-          containerPort = 80
+          containerPort = 9000
           protocol      = "tcp"
         }
       ]
@@ -119,6 +126,6 @@ resource "aws_ecs_service" "sonarqube-server-service" {
   load_balancer {
     target_group_arn = module.alb.alb_target_group_arn
     container_name   = var.container_name
-    container_port   = 80
+    container_port   = 9000
   }
 }
