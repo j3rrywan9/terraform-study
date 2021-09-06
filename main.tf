@@ -80,19 +80,18 @@ resource "aws_ecs_cluster" "sonarqube_server_cluster" {
 resource "aws_ecs_task_definition" "sonarqube_server_taskdef" {
   family        = "sonarqube-server-task"
   task_role_arn = "arn:aws:iam::950350094460:role/ecsTaskExecutionRole"
+  cpu           = 256
+  memory        = 512
   # TODO: switch to awsvpc
-  network_mode = "bridge"
+  network_mode = "host"
   container_definitions = jsonencode([
     {
       name      = var.container_name
       image     = "nginx:latest"
-      cpu       = 256
-      memory    = 512
       essential = true
       portMappings = [
         {
           containerPort = 80
-          hostPort      = 80
           protocol      = "tcp"
         }
       ]
