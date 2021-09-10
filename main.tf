@@ -1,9 +1,3 @@
-provider "aws" {
-  region     = var.aws_region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
-}
-
 module "security_groups" {
   source                  = "./modules/terraform-aws-security-groups"
   server_port             = 80
