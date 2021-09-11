@@ -84,7 +84,7 @@ resource "aws_ecs_task_definition" "sonarqube_server_taskdef" {
       essential = true
       ulimits = [
         {
-          name = "nofile"
+          name      = "nofile"
           softLimit = 65536
           hardLimit = 65536
         }
