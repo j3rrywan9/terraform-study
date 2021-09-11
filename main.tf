@@ -7,10 +7,9 @@ module "security_groups" {
 }
 
 module "alb" {
-  source          = "./modules/terraform-aws-alb"
-  vpc_id          = var.vpc_id
-  subnet_ids      = data.aws_subnet_ids.subnet_ids.ids
-  certificate_arn = data.aws_acm_certificate.sonarqube.arn
+  source     = "./modules/terraform-aws-alb"
+  vpc_id     = var.vpc_id
+  subnet_ids = data.aws_subnet_ids.subnet_ids.ids
   security_groups = [
     module.security_groups.alb_security_group_id,
   ]

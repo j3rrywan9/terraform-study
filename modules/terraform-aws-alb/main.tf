@@ -41,7 +41,7 @@ resource "aws_lb_listener" "front_end" {
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = var.certificate_arn
+  certificate_arn   = data.aws_acm_certificate.sonarqube.arn
 
   default_action {
     type             = "forward"

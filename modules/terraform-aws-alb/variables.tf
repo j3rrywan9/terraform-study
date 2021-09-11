@@ -9,7 +9,3 @@ variable "subnet_ids" {
 variable "vpc_id" {
   description = "VPC"
 }
-
-variable "certificate_arn" {
-  description = "ACM certificate to use for the ALB"
-}
